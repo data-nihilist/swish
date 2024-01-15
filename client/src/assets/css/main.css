@@ -22,6 +22,194 @@ import them into our main.scss file!
   margin: 0;
 }
 
+body {
+  font-family: Poppins;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+@media (min-width: 0) {
+  .col-8-xs {
+    box-sizing: border-box;
+    flex-grow: 0;
+    width: 66.6666666667%;
+  }
+}
+@media (min-width: 480px) {
+  .col-8-xs {
+    box-sizing: border-box;
+    flex-grow: 0;
+    width: 66.6666666667%;
+  }
+}
+@media (min-width: 720px) {
+  .col-6-md {
+    box-sizing: border-box;
+    flex-grow: 0;
+    width: 50%;
+  }
+}
+@media (min-width: 1200px) {
+  .col-6-xl {
+    box-sizing: border-box;
+    flex-grow: 0;
+    width: 50%;
+  }
+}
+
+.text-info {
+  color: #f6c31c;
+}
+
+.bg-blue-light-5 {
+  background-color: #8c8cf3;
+}
+
+.bg-yellow-light-5 {
+  background-color: #f3f38c;
+}
+
+.bg-green {
+  background-color: #19e635;
+}
+
+.text-goldenrod {
+  color: #daa520;
+}
+
+.bg-pink-light-2 {
+  background-color: #ffcdd5;
+}
+
+.bg-pink-light-3 {
+  background-color: #ffd3db;
+}
+
+.bg-pink-light-4 {
+  background-color: #ffd9e0;
+}
+
+.bg-pink-light-5 {
+  background-color: #ffe0e5;
+}
+
+.bg-pink-light-6 {
+  background-color: #ffe6ea;
+}
+
+.bg-pink-dark-8 {
+  background-color: #332629;
+}
+
+.text-black {
+  color: black;
+}
+
+.bg-black {
+  background-color: black;
+}
+
+.text-white {
+  color: white;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.card {
+  display: block;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.btn-complement-purple {
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  border: 0;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  background-color: #9900ff;
+  color: #c2ff99;
+}
+.btn-complement-purple:hover {
+  color: #9900ff;
+  background-color: #c2ff99;
+}
+
+.navbar .container, .navbar-coral .container, .navbar, .navbar-coral {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.navbar, .navbar-coral {
+  padding: 0.75rem 1.5rem;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-coral {
+  background-color: #ff7f50;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: auto;
+  padding: 8px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mt-1 {
+  margin-top: 0.75rem;
+}
+
+.mt-2 {
+  margin-top: 1.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-2 {
+  margin-bottom: 1.5rem;
+}
+
+.br {
+  border-radius: 20px;
+}
+
+.display-f {
+  display: flex;
+}
+
 @keyframes TransitioningBackground {
   0% {
     background-position: 1% 0%;

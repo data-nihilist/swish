@@ -2,7 +2,7 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient({ log: ["query", "warn", "info", "error"]});
+const prisma = new PrismaClient({ log: [/*"query", */"warn", "info", "error"]});
 
 
 const app = express();
@@ -24,13 +24,14 @@ app.use((err, req, res, next) => {
     res.status(500).send(`Something has gone terribly wrong..`);
 });
 
-app.get(`/`, async (req, res) => {      // Testing out the new set up with prisma. Very happy with the results so far!
+app.get('/', async (req, res) => {      // Testing out the new set up with prisma. Very happy with the results so far!
     try {
-        const transactions = await prisma.transaction.findMany({take: 5, where: { client_name: 'client_25' }});
+        // const transactions = await prisma.transaction.findMany({take: 2000, where: { client_name: 'client_18' }});
+        const transactions = await prisma.transaction.findMany({take: 2000, where: {client_name: "client_25"}});
         if(transactions) {
-            console.log("Retrieving All " + transactions.length + " Transactions");
-            const homie = await prisma.transaction.findFirst({ where: { client_name: "client_3" }});
-            console.log(homie.line_at_bet);
+            // console.log("Retrieving All " + transactions.length + " Transactions");
+            // const homie = await prisma.transaction.findFirst({ where: { client_name: "client_3" }});
+            // console.log(homie.line_at_bet);
             return res.status(200).json({transactions, homie});
         } else {
             console.log("Oops! Looks like there was something wrong.");
@@ -38,6 +39,18 @@ app.get(`/`, async (req, res) => {      // Testing out the new set up with prism
         } catch(error) {
             res.status(400).json({error: error.message});
         }
+})
+
+app.post('/query', async (req, res) => {
+    try {
+        console.log(req.body);
+        const { client_name } = req.body;
+        const transactions = await prisma.transaction.findMany({take: 10000, where: {client_name}}) // I'm capping this at 10000. I set it to 100K and it had no issue maxing that outselecting 'client_3' resulted in a crash (lol)
+        console.log("Found " + transactions.length + " Bets Matching " + client_name + " .");
+        return res.status(201).json({transactions});
+    } catch(error) {
+        res.status(400).json({error: error.message});
+    }
 })
 
 app.listen(PORT, () => {

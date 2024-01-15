@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-// import HeatMap from "./dataViz/HeatMap.js";
-// import TimeSeriesChart from './dataViz/TimeSeriesChart.js';
+import HeatMap from "./dataviz/HeatMap.js";
+import TimeSeriesChart from "./dataviz/TimeSeriesChart.js";
 
-const LIMIT = 5000;
-
-// Object.keys came in for the W on these select fields. As did 'SELECT DISTINCT..'
+const LIMIT = 100000;
 
 const CLIENTS = [
     "",
@@ -68,78 +66,52 @@ function QueryBuilderMenu(props) {
         [BINARY_FLAGS.is_cashout]: false,
     };
 
+    
     const [queryResults, setQueryResults] = useState([]);
     const [querySuccess, setQuerySuccess] = useState(false);
 
-    const [client, setClient] = useState("");
+    const [propertyFilters, setPropertyFilters] = useState({
+        client_name: null,
+    });
 
-    const [limit, setLimit] = useState("");
-
-    const [daySelector, setDaySelector] = useState("");
-    const [hourSelector, setHourSelector] = useState("");
-    const [minuteSelector, setMinuteSelector] = useState("");
-    const [secondSelector, setSecondSelector] = useState("");
-    const [timeSelect, setTimeSelect] = useState("");
-    const [orderBy, setOrderBy] = useState("");
-    const [ascOrDesc, setAscOrDesc] = useState("");
-    const [searchStringFromBackend, setSearchStringFromBackEnd] = useState("");
-
-    const [binaryFlagsState, setBinaryFlagsState] = useState(DEFAULT_BINARY_FLAGS_STATE);
-
-    const createToggleBinaryFlag = (flag) => (event) => {
+    const updateFields = (event) => {
         event.preventDefault();
-        const update = { ...binaryFlagsState };
-        update[flag] = !update[flag];
-        setBinaryFlagsState(update);
-    }
+        setPropertyFilters({
+            ...propertyFilters,
+            client_name: event.currentTarget.value
+        });
+    };
 
-    const ascDescOptions = ['ASC', 'DESC'].map(clause => {
-        return (
-            <option key={clause} id={clause} name={clause} value={clause}>{clause}</option>
-        )
-    })
+    // const [query_TIME_Filters, setQuery_TIME_Filters] = useState({       // use this info to construct a value on the backend representing the time in UTCzulu (zoneless).
+                                                                                // Figure out an end-time, too, so we're not making d3 (front end) do aggregating all the data.
+                                                                                    // A serializer on the backend would be a good option, using different methods for different types of constraints.
+    //     LIMIT: "",
+    //     DAY: "",
+    //     HOUR: "",
+    //     MINUTE: "",
+    //     SECOND: "",
+    // });
 
-    function handleAscOrDescSelection(event) {
-        event.preventDefault();
-        setAscOrDesc(event.currentTarget.value);
-    }
+    // const [binaryFlagsState, setBinaryFlagsState] = useState(DEFAULT_BINARY_FLAGS_STATE);   // Bah, I want this to work. I'm very happy with the state management side, but, because these four binary flags have varying data types (null, "0", 0) etc, it gets tricky to manage.
+    //                                                                                         // The Prisma ORM refactor has greatly improved the quality of considering more complex queries, but I'm also not 100% I've been interpreting much of this data correctly. Gonna keep at it.
+    // const createToggleBinaryFlag = (flag) => (event) => {
+    //     event.preventDefault();
+    //     const update = { ...binaryFlagsState };
+    //     update[flag] = !update[flag];
+    //     setBinaryFlagsState(update);
+    // }
 
-    const orderBySelectOptions = ORDER_BY_PROPERTIES.map(property => {
-        return (
-            <option key={property} id={property} name={property} value={property}>{property}</option>
-        )
-    })
+    // const binaryValues = Object.keys(binaryFlagsState);
 
-    function handleOrderBySelection(event) {
-        setOrderBy(event.currentTarget.value);
-    }
-
-    const binaryValues = Object.keys(binaryFlagsState);
-
-    const binaryBoxes = binaryValues.map(flag => {
-        const value = binaryFlagsState[flag];
-        return (
-            <div key={flag}>
-                <input type="checkbox" id={flag} checked={value} onChange={createToggleBinaryFlag(flag)} />
-                <label htmlFor={flag}>{flag}</label>
-            </div>
-        )
-    })
-
-    const limitOptions = [];
-    for (let i = 50; i <= LIMIT; i += 50) {
-        limitOptions.push(i);
-    }
-
-    const limitSelectOptions = limitOptions.map(limit => {
-        return (
-            <option key={limit} id={limit} name={limit} value={limit}>{limit}</option>
-        )
-    })
-
-    function handleLimitSelection(event) {
-        setLimit(event.currentTarget.value);
-    }
+    // const binaryBoxes = binaryValues.map(flag => {
+    //     const value = binaryFlagsState[flag];
+    //     return (
+    //         <div key={flag}>
+    //             <input type="checkbox" id={flag} checked={value} onChange={createToggleBinaryFlag(flag)} />
+    //             <label htmlFor={flag}>{flag}</label>
+    //         </div>
+    //     )
+    // })
 
     const clientNameOptions = CLIENTS.map(client => {
         return (
@@ -147,49 +119,16 @@ function QueryBuilderMenu(props) {
         )
     })
 
-    function handleClientSelection(event) {
-        setClient(event.currentTarget.value);
+    const limitOptions = [];
+    for(let i = 0; i <= LIMIT; i+= 500) {
+        limitOptions.push(i);
     }
-
-    const daySelectOptions = DAY_SELECT.map(day => {
+    
+    const limiterSelect = limitOptions.map(limit => {
         return (
-            <option key={day} id={day} name={day} value={day}>{day}</option>
+            <option key={limit} id={limit} name={limit} value={limit}>{limit}</option>
         )
     })
-
-    function handleDaySelection(event) {
-        setDaySelector(event.currentTarget.value);
-    }
-
-    const hourSelectOptions = HOUR_SELECT.map(hour => {
-        return (
-            <option key={hour} id={hour} name={hour} value={hour}>{hour}</option>
-        )
-    })
-
-    function handleHourSelection(event) {
-        setHourSelector(event.currentTarget.value);
-    }
-
-    const minuteSelectOptions = MINUTE_SELECT.map(minute => {
-        return (
-            <option key={minute} id={minute} name={minute} value={minute}>{minute}</option>
-        )
-    })
-
-    function handleMinuteSelection(event) {
-        setMinuteSelector(event.currentTarget.value);
-    }
-
-    const secondSelectOptions = SECOND_SELECT.map(second => {
-        return (
-            <option key={second} id={second} name={second} value={second}>{second}</option>
-        )
-    })
-
-    function handleSecondSelection(event) {
-        setSecondSelector(event.currentTarget.value);
-    }
 
     const testAPI = async (event) => {
         event.preventDefault();
@@ -199,7 +138,10 @@ function QueryBuilderMenu(props) {
                 throw(new Error(`${response.status} (${response.statusText})`));
             }
             const responseBody = await response.json();
-            console.log(responseBody);
+            // console.log("transaction results: ", responseBody.transactions);
+            setQueryResults(responseBody.transactions);
+            setQuerySuccess(true);
+            console.log("set results: ", queryResults);
         } catch(error) {
             console.error(`Error in fetch: ${error}`);
         }
@@ -207,96 +149,42 @@ function QueryBuilderMenu(props) {
 
     const UserDecidedTransactionQuery = async (event) => {
         event.preventDefault();
-        if (daySelector && hourSelector && minuteSelector && secondSelector) {
-            setTimeSelect(`2023-11-0${daySelector}T${hourSelector}:${minuteSelector}:${secondSelector}.000Z`)
-        }
+        console.log("PropertyFilters: ", propertyFilters)
         try {
-            const response = await fetch('http://localhost:3001/', {
+            const queryRequest = await fetch('http://localhost:3001/query', {
                 method: "POST",
-                body: JSON.stringify({ client, ...binaryFlagsState, timeSelect, orderBy, ascOrDesc, limit }),
+                body: JSON.stringify(propertyFilters),
                 headers: new Headers({
                     "Content-Type": "application/json",
                 }),
             });
-            if (!response.ok) {
-                throw (new Error(`${response.status} (${response.statusText})`))
+            if (!queryRequest.ok) {
+                throw (new Error(`${queryRequest.status} (${queryRequest.statusText})`))
             }
-            const responseBody = await response.json();
-            // setQueryResults(responseBody.transactions);
+            const queryResponseBody = await queryRequest.json();
+            console.log("transactions", queryResponseBody.transactions)
+            setQueryResults(queryResponseBody.transactions);
             setQuerySuccess(true);
-
-            console.log(responseBody)
-            setSearchStringFromBackEnd(responseBody.string);
         } catch (error) {
             console.error(`Error in fetch: ${error}`)
         }
     };
 
-    const TIME_SELECT_DECORATOR = "Time Select (returns transactions >= DD:HH:MM:SS)"
-
     return (
         <div className="container">
             <div className="col-6-xl col-6-md col-4-sm col-8-xs">
-                <form onSubmit={testAPI}>
+                <form onSubmit={UserDecidedTransactionQuery}>
                     <div className="card bg-black text-white">
                         <h4 className="display-f justify-center mb-2 mt-2"><code>Query by client_id</code></h4>
                         <div className="display-f justify-center">
-                            <select onChange={handleClientSelection} className="bg-pink-light-6 text-black card">
+                            <select onChange={updateFields} className="bg-pink-light-6 text-black card">
                                 {clientNameOptions}
                             </select>
                         </div>
-                        {/* <div className="text-goldenrod display-f justify-center">
-                            <fieldset>
-                                <legend>Add Binary Filter
-                                    <code>SELECT FROM</code>                                    // building the query string is already spaghetti coded - removing these filters for now (you can still sort either one of these);
-                                </legend>
-                                {binaryBoxes}
-                            </fieldset>
-                        </div> */}
-                        <code><h4 className="mt-2 display-f justify-center">{TIME_SELECT_DECORATOR}</h4></code>
-                        <h6 className="text-info bg-pink-dark-8 display-f justify-center">TOFIX: Selecting one field will result in error - please select '00' if you don't need a specific interval.</h6>
-                        <h6 className="text-info bg-pink-dark-8 display-f justify-center">defaults to: '..ORDER BY accepted_datetime_utc ASC LIMIT(1000);</h6>
-                        <div className="navbar">
-                            <code className="bg-green text-white">day</code>
-                            <select onChange={handleDaySelection} className="card bg-pink-light-5 text-black">
-                                <option></option>
-                                {daySelectOptions}
-                            </select>
-                            <code className="bg-green text-white">hour</code>
-                            <select onChange={handleHourSelection} className="card bg-pink-light-4 text-black">
-                                <option></option>
-                                {hourSelectOptions}
-                            </select>
-                            <code className="bg-green text-white">min</code>
-                            <select onChange={handleMinuteSelection} className="card bg-pink-light-3 text-black">
-                                <option></option>
-                                {minuteSelectOptions}
-                            </select>
-                            <code className="bg-green text-white">sec</code>
-                            <select onChange={handleSecondSelection} className="card bg-pink-light-2 text-black">
-                                <option></option>
-                                {secondSelectOptions}
-                            </select>
-                        </div>
-                        <code className="text-info display-f justify-center mb-1 mt-1">Order Results By</code>
+                        <h4 className="display-f justify-center mb-2 mt-2"><code>LIMIT(`amount`)</code></h4>
                         <div className="display-f justify-center">
-                            <select onChange={handleOrderBySelection} className="card bg-blue-light-5 text-white">
-                                {orderBySelectOptions}
-                            </select>
-                        </div>
-                        <code><h4 className="display-f justify-center mb-2 mt-2">/ASCENDING // DESCENDING\</h4></code>
-                        <div className="display-f justify-center">
-                            <select onChange={handleAscOrDescSelection} className="card bg-white text-black">
-                                {ascDescOptions}
-                            </select>
-                        </div>
-                        <div>
-                        </div>
-                        <code><h4 className="display-f justify-center mb-2 mt-2">Set Limit Of Query</h4></code>
-                        <div className="display-f justify-center">
-                            <select onChange={handleLimitSelection} className="card bg-yellow-light-5 text-black">
-                                <option></option>
-                                {limitSelectOptions}
+                            <select onChange={updateFields} className="bg-pink-light-6 text-black card">
+                                {limiterSelect}
                             </select>
                         </div>
                         <div className="display-f justify-center mt-2 mb-1">
@@ -305,10 +193,9 @@ function QueryBuilderMenu(props) {
                     </div>
                 </form>
             </div>
-            <div className="card container">
-                <code>{searchStringFromBackend}</code>
-                {/* {querySuccess ? <div className="card"><HeatMap data={queryResults} /></div> : null}
-                {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /></div> : null} */}
+            <div>
+                {querySuccess ? <HeatMap data={queryResults} /> : null}
+                {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /></div> : null}
             </div>
         </div>
 
@@ -387,17 +274,17 @@ const ORDER_BY_PROPERTIES = [
     'prob_diff_at_bet',
     'prob_norm_at_bet',
     'book_profit_gross',
-    'component_cnt_bet',
+    'component_cnt_bet',    // art.     Keeping here because it's a nice shape and it's fun to play with when reading about sports betting
     'component_num_bet',
     'component_id_swish',
-    'market_duration_id', // bet
-    'book_risk_component', //bet
-    'market_suspended_id',  //bet
-    'event_time_remaining',  //event
-    'market_duration_type',    // bet
-    'accepted_datetime_utc',    // bet
-    'market_duration_value',    // betting?
-    'accepted_min_before_start', // bet
-    'book_profit_gross_component', // bet
-    'market_suspended_description' // bet market
+    'market_duration_id',
+    'book_risk_component',
+    'market_suspended_id',
+    'event_time_remaining',
+    'market_duration_type',
+    'accepted_datetime_utc',
+    'market_duration_value',
+    'accepted_min_before_start',
+    'book_profit_gross_component',
+    'market_suspended_description'
 ];
