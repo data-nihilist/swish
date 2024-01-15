@@ -24,17 +24,16 @@ app.use((err, req, res, next) => {
     res.status(500).send(`Something has gone terribly wrong..`);
 });
 
+// Use this getter to troubleshoot your api connection is up and running at localhost:3001/
+
 app.get('/', async (req, res) => {      // Testing out the new set up with prisma. Very happy with the results so far!
     try {
-        // const transactions = await prisma.transaction.findMany({take: 2000, where: { client_name: 'client_18' }});
         const transactions = await prisma.transaction.findMany({take: 2000, where: {client_name: "client_25"}});
         if(transactions) {
             // console.log("Retrieving All " + transactions.length + " Transactions");
-            // const homie = await prisma.transaction.findFirst({ where: { client_name: "client_3" }});
-            // console.log(homie.line_at_bet);
             return res.status(200).json({transactions, homie});
         } else {
-            console.log("Oops! Looks like there was something wrong.");
+            console.log("You either don't have your dependencies installed or your forgot to place a connection string for postgresql in a .env file in this director. :)");
         }
         } catch(error) {
             res.status(400).json({error: error.message});
@@ -43,7 +42,7 @@ app.get('/', async (req, res) => {      // Testing out the new set up with prism
 
 app.post('/query', async (req, res) => {
         console.log(req.body);
-        const { client_name, LIMIT, team_abbr } = req.body;
+        const { client_name, LIMIT, team_abbr } = req.body;     // Here is where things were becoming insane during my first appraoch to this. If you still have access to it, check it out. This is 1/1k the size and headache!
         try {
             if(team_abbr === null && client_name === null) {
                 console.log("no team selected.");
