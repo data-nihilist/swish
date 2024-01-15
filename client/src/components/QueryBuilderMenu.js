@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import HeatMap from "./dataviz/HeatMap.js";
 import TimeSeriesChart from "./dataviz/TimeSeriesChart.js";
-//eslint-disable-next-line
 import Lissajous from "./dataviz/fun/lissajous.js";
+import Scatter from "./dataviz/Scatter.js";
 
 const LIMIT = 100000;
 
@@ -24,51 +24,59 @@ const CLIENTS = [
     "client_10",
 ];
 
-const DAY_SELECT = ['4', '5'];
-const HOUR_SELECT = []
-for (let i = 0; i < 24; i++) {
-    if (i < 10) {
-        HOUR_SELECT.push(`0${i}`);
-    } else {
-        HOUR_SELECT.push(`${i}`);
-    }
-}
-const MINUTE_SELECT = [];
-for (let i = 0; i < 60; i++) {
-    if (i < 10) {
-        MINUTE_SELECT.push(`0${i}`);
-    } else {
-        MINUTE_SELECT.push(`${i}`);
-    }
-}
-const SECOND_SELECT = [];
-for (let i = 0; i < 60; i++) {
-    if (i < 10) {
-        SECOND_SELECT.push(`0${i}`);
-    } else {
-        SECOND_SELECT.push(`${i}`);
-    }
-}
-
 function QueryBuilderMenu(props) {
 
     // binary flag enums  >> This is a standard in many OSS projects I've picked up. If you have a checkbox, it should be mapped to state. That state should be as simple as possible + null i.e. a strict true/false binary.
 
-    const BINARY_FLAGS = {
-        is_alternate: "is_alternate",
-        is_inplay: "is_inplay",
-        is_active: "is_active",
-        is_cashout: "is_cashout"
-    };
+    // const BINARY_FLAGS = {
+    //     is_alternate: "is_alternate",
+    //     is_inplay: "is_inplay",
+    //     is_active: "is_active",
+    //     is_cashout: "is_cashout"
+    // };
 
-    const DEFAULT_BINARY_FLAGS_STATE = {
-        [BINARY_FLAGS.is_alternate]: false,
-        [BINARY_FLAGS.is_inplay]: false,
-        [BINARY_FLAGS.is_active]: false,
-        [BINARY_FLAGS.is_cashout]: false,
-    };
+    // const DEFAULT_BINARY_FLAGS_STATE = {
+    //     [BINARY_FLAGS.is_alternate]: false,
+    //     [BINARY_FLAGS.is_inplay]: false,
+    //     [BINARY_FLAGS.is_active]: false,
+    //     [BINARY_FLAGS.is_cashout]: false,
+    // };
 
+    // const [binaryFlagsState, setBinaryFlagsState] = useState(DEFAULT_BINARY_FLAGS_STATE);   // Bah, I want this to work. I'm very happy with the state management side, but, because these four binary flags have varying data types (null, "0", 0) etc, it gets tricky to manage.
+    //                                                                                         // The Prisma ORM refactor has greatly improved the quality of considering more complex queries, but I'm also not 100% I've been interpreting much of this data correctly. Gonna keep at it.
+    // const createToggleBinaryFlag = (flag) => (event) => {
+    //     event.preventDefault();
+    //     const update = { ...binaryFlagsState };
+    //     update[flag] = !update[flag];
+    //     setBinaryFlagsState(update);
+    // }
+
+    // const binaryValues = Object.keys(binaryFlagsState);
+
+    // const binaryBoxes = binaryValues.map(flag => {
+    //     const value = binaryFlagsState[flag];
+    //     return (
+    //         <div key={flag}>
+    //             <input type="checkbox" id={flag} checked={value} onChange={createToggleBinaryFlag(flag)} />
+    //             <label htmlFor={flag}>{flag}</label>
+    //         </div>
+    //     )
+    // })
     
+    /* Use this info to construct a value on the backend representing the time in UTCzulu (zoneless).
+     Figure out an end-time, too, so we're not making d3 (front end) do aggregating all the data.
+     A serializer on the backend would be a good option, using different methods for different types of constraints. 
+    */
+
+
+// const [query_TIME_Filters, setQuery_TIME_Filters] = useState({       
+//     LIMIT: "",
+//     DAY: "",
+//     HOUR: "",
+//     MINUTE: "",
+//     SECOND: "",
+// });
+
     const [queryResults, setQueryResults] = useState([]);
     const [querySuccess, setQuerySuccess] = useState(false);
 
@@ -102,40 +110,7 @@ function QueryBuilderMenu(props) {
         });
     };
 
-        /* Use this info to construct a value on the backend representing the time in UTCzulu (zoneless).
-         Figure out an end-time, too, so we're not making d3 (front end) do aggregating all the data.
-         A serializer on the backend would be a good option, using different methods for different types of constraints. 
-        */
 
-
-    // const [query_TIME_Filters, setQuery_TIME_Filters] = useState({       
-    //     LIMIT: "",
-    //     DAY: "",
-    //     HOUR: "",
-    //     MINUTE: "",
-    //     SECOND: "",
-    // });
-
-    // const [binaryFlagsState, setBinaryFlagsState] = useState(DEFAULT_BINARY_FLAGS_STATE);   // Bah, I want this to work. I'm very happy with the state management side, but, because these four binary flags have varying data types (null, "0", 0) etc, it gets tricky to manage.
-    //                                                                                         // The Prisma ORM refactor has greatly improved the quality of considering more complex queries, but I'm also not 100% I've been interpreting much of this data correctly. Gonna keep at it.
-    // const createToggleBinaryFlag = (flag) => (event) => {
-    //     event.preventDefault();
-    //     const update = { ...binaryFlagsState };
-    //     update[flag] = !update[flag];
-    //     setBinaryFlagsState(update);
-    // }
-
-    // const binaryValues = Object.keys(binaryFlagsState);
-
-    // const binaryBoxes = binaryValues.map(flag => {
-    //     const value = binaryFlagsState[flag];
-    //     return (
-    //         <div key={flag}>
-    //             <input type="checkbox" id={flag} checked={value} onChange={createToggleBinaryFlag(flag)} />
-    //             <label htmlFor={flag}>{flag}</label>
-    //         </div>
-    //     )
-    // })
 
     const clientNameOptions = CLIENTS.map(client => {
         return (
@@ -169,7 +144,6 @@ function QueryBuilderMenu(props) {
                 throw(new Error(`${response.status} (${response.statusText})`));
             }
             const responseBody = await response.json();
-            // console.log("transaction results: ", responseBody.transactions);
             setQueryResults(responseBody.transactions);
             setQuerySuccess(true);
             console.log("set results: ", queryResults);
@@ -231,8 +205,10 @@ function QueryBuilderMenu(props) {
                 </form>
             </div>
             <div>
-                {querySuccess ? <HeatMap data={queryResults} /> : null}
-                {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /></div> : <div className="card container bg-coral"><Lissajous data={queryResults}/><Lissajous data={queryResults}/></div>}
+            {querySuccess ? <HeatMap data={queryResults} /> : null}
+            {querySuccess ? <Scatter data={queryResults} /> : null}
+            {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /> </div>: null}
+            {/*</div> : <div className=" display-f justify-center"><Lissajous data={queryResults}/><Lissajous data={queryResults}/></div>*/}
             </div>
         </div>
 

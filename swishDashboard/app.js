@@ -2,7 +2,7 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient({ log: [/*"query", */"warn", "info", "error"]});
+const prisma = new PrismaClient({ log: ["query","warn", "info", "error"]});
 
 
 const app = express();

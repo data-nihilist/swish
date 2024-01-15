@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swish": "nodemon server/app.js"
+    "swish": "nodemon server/app.ts"
   },
   "keywords": [],
   "author": "",
