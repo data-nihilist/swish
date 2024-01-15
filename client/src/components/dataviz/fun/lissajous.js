@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-function Lissajous({ data }) {
+function Lissajous() {
     const svgRef = useRef();
     const margin = { top: 30, right: 120, bottom: 50, left: 60 };
     const width = 350 - margin.left - margin.right;

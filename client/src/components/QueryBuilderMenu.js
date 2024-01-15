@@ -204,12 +204,11 @@ function QueryBuilderMenu(props) {
                     </div>
                 </form>
             </div>
-            <div>
+            <div className=" display-f justify-center">
             {querySuccess ? <HeatMap data={queryResults} /> : null}
             {querySuccess ? <Scatter data={queryResults} /> : null}
             {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /> </div>: null}
-            {/*</div> : <div className=" display-f justify-center"><Lissajous data={queryResults}/><Lissajous data={queryResults}/></div>*/}
-            </div>
+            </div> : <div><Lissajous data={queryResults}/><Lissajous data={queryResults}/></div>
         </div>
 
     )
