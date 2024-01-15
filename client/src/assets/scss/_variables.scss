@@ -1,0 +1,60 @@
+/*
+All code seen below was originally written in main.scss!
+Here we've implemented 'partials', and now we can define
+variables in this '_variables.scss' folder, then simply
+import them into our main.scss file!
+*/
+//-----------------------------creating variables
+// To create a variable: ```$banana: value```
+
+// examples for theme colors variables
+$primary: #326dee !default;
+$secondary: #1ac886 !default;
+$error: #d32752 !default;
+$info: #f6c31c !default;
+
+//-------------------------------------color-palette
+$colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "error": $error,
+    "info": $info,
+    "blue": #1919e6,
+    "red": #e61919,
+    "yellow": #e6e619,
+    "green": #19e635,
+    "lime": #00ff00,
+    "orange": #ffa600,
+    "goldenrod": #daa520,
+    "cyan": #00ffff,
+    "purple": #9900ff,
+    "coral": #ff7f50,
+    "pink": #ffc0cb,
+    "gray": #808080,
+    "black": black,
+    "white": white,
+    "fun": #e971f1
+);
+
+// @debug map-get($colors, "purple");  // returns hash code for color --> '#9900ff'
+// @debug map-has-key($colors, "tertiary"); // false
+// @debug map-remove($colors, "primary"); // removes the primary key/value pair from our $colors map
+// @debug map-merge($colors, ("pink": #ffc0cb)); // now pink is in our color pallet
+
+// examples for spacing variables
+$base-padding: 0.75rem;
+$base-margin: 0.75rem;
+
+// examples for border variables
+$base-border-thickness: 1px;
+$base-border-radius: 20px;
+
+// box-shadow
+$base-box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
+
+// font sizes
+$base-font-size: 1rem;
+$font-size-sm: $base-font-size * 0.75;
+$font-size-lg: $base-font-size * 1.5;
+$font-size-xl: $base-font-size * 2;
+$font-size-xxl: $base-font-size * 3;

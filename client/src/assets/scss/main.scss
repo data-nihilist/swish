@@ -1,0 +1,42 @@
+// place global css here
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    -moz-tab-size: 4;
+    tab-size: 4;
+
+}
+//-----------------------------------------------------------------------------------------------------
+@import 'functions';
+@import 'variables';
+
+@import '_base';
+@import '_breakpoints';
+@import '_grid';
+
+@import '_colors';
+
+@import 'components/card';
+@import 'components/button';
+@import 'components/navbar';
+@import 'components/tooltip';
+
+@import '_utilities';
+
+@keyframes TransitioningBackground {
+    0% {
+    background-position: 1% 0%;
+    }
+
+    50% {
+    background-position: 99% 100%;
+    }
+
+    100% {
+    background-position: 1% 0%;
+    }
+}

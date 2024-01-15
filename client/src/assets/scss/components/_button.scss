@@ -1,0 +1,41 @@
+@mixin btn($bg-color: #e2e2e2) { // originially `()`, now we're being dynamic with our mixin!
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    border: 0;
+    padding: $base-padding $base-padding * 2;
+    border-radius: $base-border-radius / 2;
+    background-color: $bg-color
+
+}
+
+// without the parentheses, mixin will use the default we set above
+.btn {
+    @include btn;   // use default $bg-color declared on line 1
+}
+
+@each $key, $val in $colors {
+    .btn-#{$key} {
+        @include btn($val);
+        // background-color: $val; we moved this value into the mixin's parentheses!
+        &:hover {
+            background-color: lighten($val, 5)
+        }
+
+    }
+    .btn-outlined-#{$key} {
+        @include btn(#fff);
+        border: $base-border-thickness solid $val;
+        &:hover {
+            background-color: $val;
+        }
+    }
+    .btn-complement-#{$key} {
+        @include btn($val);
+        color: light-comp($val);
+        &:hover {
+            color: $val;
+            background-color: light-comp($val);
+        }
+    }
+}
