@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model User {
+//   id Int @id @default(autoincrement())
+//   name String
+// }
+
+model Transaction {
+    id                   Int@id @default(autoincrement())
+    component_cnt_bet    Int?
+    selection            String?
+    line                 Float?
+    is_alternate         Int?
+    is_inplay            Int?
+    is_active            String?
+    is_cashout           String?
+    currency             String?
+    book_risk_component  Float?
+    book_profit_gross_component Float?
+    client_id            Int?
+    country              String?
+    state                String?
+    accepted_datetime_utc DateTime?
+    component_price      Float?
+    component_prob       Float?
+    component_num_bet    Int?
+    bet_type_id          Int?
+    bet_type             String?
+    book_risk            Float?
+    parlay_type_id       Int?
+    book_profit_gross    Float?
+    parlay_type          String?
+    bet_price            Float?
+    bet_prob             Float?
+    country_id           Int?
+    state_id             String?
+    currency_id          Int?
+    sport_id             Int?
+    sport                String?
+    season               Int?
+    date                 DateTime?
+    datetime_utc         DateTime?
+    event_id             Int?
+    event_status_id      Int?
+    event_type_id        Int?
+    stat_type_id         Int?
+    stat_type            String?
+    product_id           Int?
+    product              String?
+    team_id              Int?
+    opp_id               Int?
+    team_abbr            String?
+    opp_abbr             String?
+    home                 Int?
+    player_id            Int?
+    player_name          String?
+    pos_id               Int?
+    pos_abbr             String?
+    game_played          Int?
+    game_started         Int?
+    actual               Float?
+    accepted_min_before_start Float?
+    settled_date         DateTime?
+    market_duration_id   Int?
+    market_duration_value String?
+    market_duration_type  String?
+    bet_id_swish         String?
+    component_id_swish   String?
+    line_at_bet          Float?
+    prob_norm_at_bet     Float?
+    proj_at_bet          Float?
+    market_suspended_id  String?
+    market_suspended_description String?
+    gamestate_id         Float?
+    gamestate            String?
+    score                Float?
+    opp_score            Float?
+    period               Float?
+    usage_at_bet         Float?
+    actual_at_bet        Float?
+    is_in_game           Float?
+    event_time_id        Int?
+    event_time_remaining Int?
+    usage_id             Int?
+    orig_proj_at_bet     Float?
+    line_diff_at_bet     Float?
+    prob_diff_at_bet     Float?
+    received_date        DateTime?
+    client_name          String?
+
+    @@index([client_name, player_name, sport, season, currency, country, is_active])
+}
