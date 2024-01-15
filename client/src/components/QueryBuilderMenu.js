@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import HeatMap from "./dataviz/HeatMap.js";
 import TimeSeriesChart from "./dataviz/TimeSeriesChart.js";
+//eslint-disable-next-line
+import Lissajous from "./dataviz/fun/lissajous.js";
 
 const LIMIT = 100000;
 
@@ -72,6 +74,8 @@ function QueryBuilderMenu(props) {
 
     const [propertyFilters, setPropertyFilters] = useState({
         client_name: null,
+        LIMIT: null,
+        team_abbr: null
     });
 
     const updateFields = (event) => {
@@ -82,9 +86,29 @@ function QueryBuilderMenu(props) {
         });
     };
 
-    // const [query_TIME_Filters, setQuery_TIME_Filters] = useState({       // use this info to construct a value on the backend representing the time in UTCzulu (zoneless).
-                                                                                // Figure out an end-time, too, so we're not making d3 (front end) do aggregating all the data.
-                                                                                    // A serializer on the backend would be a good option, using different methods for different types of constraints.
+    const updateLimit = (event) => {
+        event.preventDefault()
+        setPropertyFilters({
+            ...propertyFilters,
+            LIMIT: event.currentTarget.value
+        });
+    };
+
+    const updateTeamChoice = (event) => {
+        event.preventDefault()
+        setPropertyFilters({
+            ...propertyFilters,
+            team_abbr: event.currentTarget.value
+        });
+    };
+
+        /* Use this info to construct a value on the backend representing the time in UTCzulu (zoneless).
+         Figure out an end-time, too, so we're not making d3 (front end) do aggregating all the data.
+         A serializer on the backend would be a good option, using different methods for different types of constraints. 
+        */
+
+
+    // const [query_TIME_Filters, setQuery_TIME_Filters] = useState({       
     //     LIMIT: "",
     //     DAY: "",
     //     HOUR: "",
@@ -127,6 +151,13 @@ function QueryBuilderMenu(props) {
     const limiterSelect = limitOptions.map(limit => {
         return (
             <option key={limit} id={limit} name={limit} value={limit}>{limit}</option>
+        )
+    })
+
+    const teamOptions = ['', 'MIN', 'UTA'];
+    const teamSelect = teamOptions.map(team => {
+        return (
+            <option key={team} id={team} name={team} value={team}>{team}</option>
         )
     })
 
@@ -183,8 +214,14 @@ function QueryBuilderMenu(props) {
                         </div>
                         <h4 className="display-f justify-center mb-2 mt-2"><code>LIMIT(`amount`)</code></h4>
                         <div className="display-f justify-center">
-                            <select onChange={updateFields} className="bg-pink-light-6 text-black card">
+                            <select onChange={updateLimit} className="bg-pink-light-6 text-black card">
                                 {limiterSelect}
+                            </select>
+                        </div>
+                        <h4 className="display-f justify-center mb-2 mt-2"><code>TEAM(`Minnesota Timberwolves vs. Utah Jazz`)</code></h4>
+                        <div className="display-f justify-center">
+                            <select onChange={updateTeamChoice} className="bg-pink-light-6 text-black card">
+                                {teamSelect}
                             </select>
                         </div>
                         <div className="display-f justify-center mt-2 mb-1">
@@ -195,7 +232,7 @@ function QueryBuilderMenu(props) {
             </div>
             <div>
                 {querySuccess ? <HeatMap data={queryResults} /> : null}
-                {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /></div> : null}
+                {querySuccess ? <div className="card"><TimeSeriesChart data={queryResults} /></div> : <div className="card container bg-coral"><Lissajous data={queryResults}/><Lissajous data={queryResults}/></div>}
             </div>
         </div>
 

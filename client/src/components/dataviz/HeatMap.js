@@ -6,35 +6,16 @@ function HeatMap({ data }) {
     const [dimensions, setDimensions] = useState({ width: 950, height: 600 }); // Increase width
     const margin = { top: 50, right: 20, bottom: 100, left: 120, legendRight: 10 }; // Additional margin for legend
 
-
-//------------ This is me attempting to determine specific columns based on user interactivity - tricky!
-
-        // I'm going to side car this for now, as I'm happy with how this chart is shaping up.
-            // Before I abandon ship, I think the right approach would be to pull this up a level back to the query builder menu component.
-
-    // const [stat1Select, setStat1Select] = useState("player");
-    // const [stat2Select, setStat2Select] = useState("stat");
-
-    // const [statSelect, setStatSelect] = useState({
-    //     stat1: [...stat1Select],
-    //     stat2: [...stat2Select],
-    // })
-
-    // const updateFields = (event) => {
-    //     event.preventDefault();
-    //     setStatSelect({
-    //         ...statSelect,
-    //         [event.currentTarget.name]: event.currentTarget.value,
-    //     });
-    // };
-
     useEffect(() => {
         if (data && svgRef.current) {
             
             const processedData = data.map(d => ({
                 player: d.player_name,
                 stat: d.stat_type,
-                prob: d.component_prob
+                prob: d.component_prob,
+                line_at_bet: d.line_at_bet,
+                parlay_type: d.parlay_type
+            
             }));
 
             const players = [...new Set(processedData.map(d => d.player))];
@@ -80,7 +61,7 @@ function HeatMap({ data }) {
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", .9);
-                    tooltip.html(`Player: ${d.player}<br>Stat: ${d.stat}<br>Prob: ${d.prob.toFixed(2)}`)
+                    tooltip.html(`Player: ${d.player}<br>Stat: ${d.stat}<br>Line @ Bet: ${d.line_at_bet}<br> ${d.parlay_type}<br>Component Prob: ${d.prob.toFixed(2)}`)
                         .style("left", (event.pageX) + "px")
                         .style("top", (event.pageY - 28) + "px");
                 })

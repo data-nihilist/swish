@@ -13,6 +13,7 @@ function TimeSeriesChart({ data }) {
     const height = 400 - margin.top - margin.bottom;
 
     useEffect(() => {
+        
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 
@@ -99,12 +100,6 @@ function TimeSeriesChart({ data }) {
             .style("font-size", "12px")
             .attr("text-anchor", "start");
 
-        legend.append("text")
-            .attr("x", 20)
-            .attr("y", 20)
-            .text("Bet Price")
-            .style("font-size", "12px")
-            .attr("text-anchor", "start");
 
         svg.append("text")
             .attr("x", (width - margin.left - margin.right) / 2)

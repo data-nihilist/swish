@@ -42,15 +42,22 @@ app.get('/', async (req, res) => {      // Testing out the new set up with prism
 })
 
 app.post('/query', async (req, res) => {
-    try {
         console.log(req.body);
-        const { client_name } = req.body;
-        const transactions = await prisma.transaction.findMany({take: 10000, where: {client_name}}) // I'm capping this at 10000. I set it to 100K and it had no issue maxing that outselecting 'client_3' resulted in a crash (lol)
-        console.log("Found " + transactions.length + " Bets Matching " + client_name + " .");
-        return res.status(201).json({transactions});
-    } catch(error) {
-        res.status(400).json({error: error.message});
-    }
+        const { client_name, LIMIT, team_abbr } = req.body;
+        try {
+            if(team_abbr === null && client_name === null) {
+                console.log("no team selected.");
+                const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name}})
+                console.log("Found " + transactions + " Bets Matching " + client_name);
+                return res.status(201).json({transactions});
+            } else {
+                const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name, team_abbr}}) // I'm capping this at 10000. I set it to 100K and it had no issue maxing that outselecting 'client_3' resulted in a crash (lol)
+                console.log("Found " + transactions.length + " Bets Matching " + client_name + " with bets placed towards " + team_abbr);
+                return res.status(201).json({transactions});
+            }
+        } catch(error) {
+            res.status(400).json({error: error.message});
+        }
 })
 
 app.listen(PORT, () => {
