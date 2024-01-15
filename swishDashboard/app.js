@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {      // Testing out the new set up with prism
     try {
         const transactions = await prisma.transaction.findMany({take: 2000, where: {client_name: "client_25"}});
         if(transactions) {
-            // console.log("Retrieving All " + transactions.length + " Transactions");
+            // console.log("Retrieving All " + transactions.length + " Transactions"); // because sometimes you just want to see "20000 rows fetched in your console"
             return res.status(200).json({transactions, homie});
         } else {
             console.log("You either don't have your dependencies installed or your forgot to place a connection string for postgresql in a .env file in this director. :)");
@@ -45,7 +45,7 @@ app.post('/query', async (req, res) => {
         const { client_name, LIMIT, team_abbr } = req.body;     // Here is where things were becoming insane during my first appraoch to this. If you still have access to it, check it out. This is 1/1k the size and headache!
         try {
             if(team_abbr === null && client_name === null) {
-                console.log("no team selected.");
+                console.log("no team selected.");                         // similar to c#/other type safe languages, coercing a string to an int with a bitwise cast can be extremely clutch. Could probably take this approach for some of the binary flags.
                 const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name}})
                 console.log("Found " + transactions + " Bets Matching " + client_name);
                 return res.status(201).json({transactions});

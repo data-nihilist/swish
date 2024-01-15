@@ -1,4 +1,4 @@
-Swish Dashboard
+Swish Dashboard,
 
 In server, run `$ npm run swish` after installing dev dependencies. I used nodemon for watching my server but you can use whichever you prefer.
 

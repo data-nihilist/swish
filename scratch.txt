@@ -1,10 +1,10 @@
-
 Here is how I got the data into my local database for querying with Prisma ORM.
 
-
-    First install jq globally to your machine. `$ npm i jq -g`
-
-        Ensure you're in the directory your data.json file lives.
+  Open the assessment data.json and just place the whole dang thing in one array. i.e.: ```[
+                                                                                              {
+    First install jq globally to your machine. `$ npm i jq -g`                                  "key" : val,
+                                                                                                "key" : val,
+        Ensure you're in the directory your data.json file lives.                           //...
         
         Then run the following jq command to create a CSV copy of your json data. Yes, this will include any and all null values (jq default feature)
 
