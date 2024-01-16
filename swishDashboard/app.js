@@ -44,10 +44,10 @@ app.post('/query', async (req, res) => {
         console.log(req.body);
         const { client_name, LIMIT, team_abbr } = req.body;     // Here is where things were becoming insane during my first appraoch to this. If you still have access to it, check it out. This is 1/1k the size and headache!
         try {
-            if(team_abbr === null && client_name === null) {
+            if(team_abbr === null && client_name === null && LIMIT === null) {
                 console.log("no team selected.");                         // similar to c#/other type safe languages, coercing a string to an int with a bitwise cast can be extremely clutch. Could probably take this approach for some of the binary flags.
-                const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name}})
-                console.log("Found " + transactions + " Bets Matching " + client_name);
+                const transactions = await prisma.transaction.findMany({take: 2500})
+                console.log("Found " + transactions + " Bets.");
                 return res.status(201).json({transactions});
             } else {
                 const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name, team_abbr}}) // I'm capping this at 10000. I set it to 100K and it had no issue maxing that outselecting 'client_3' resulted in a crash (lol)
