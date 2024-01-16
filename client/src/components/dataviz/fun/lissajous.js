@@ -51,7 +51,7 @@ function Lissajous() {
         },
 
 
- [data]);
+ []);
 return (
     <svg ref={svgRef} width={width + margin.left + margin.right} height={height + margin.top + margin.bottom} />
 );
