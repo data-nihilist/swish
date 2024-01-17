@@ -43,11 +43,6 @@ There are two categories you can set as of right now (These were determined in t
 
 Next logical step here will be to allow the user to define the x and y axes. I also want to render a tree but I'll have to figure out which data points are worth doing so (maybe a BT where each node's key is determined by an array of unique values of probability/count (average of how often a probability is submitted)? Only time will tell!
 
-Cheers,
-Matthew
-
-Happy to help in any way if I can if the directions I've supplied here aren't enough to get things running.
-
 
 Cheers,
 Matthew McCredy
