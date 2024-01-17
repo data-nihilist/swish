@@ -20,7 +20,13 @@ function HeatMap({ data }) {
 
             const players = [...new Set(processedData.map(d => d.player))];
             const stats = [...new Set(processedData.map(d => d.stat))];
-            const colorDomain = d3.extent(processedData, d => d.prob);
+            const colorDomain = d3.extent(processedData, d => {
+               if(d.prob != null) {
+                return d.prob;
+               } else {
+                return d.prob = 0;
+               }
+            });
 
             const xScale = d3.scaleBand()
                 .domain(stats)
@@ -56,7 +62,13 @@ function HeatMap({ data }) {
                 .attr("y", d => yScale(d.player))
                 .attr("width", xScale.bandwidth())
                 .attr("height", yScale.bandwidth())
-                .style("fill", d => colorScale(d.prob))
+                .style("fill", d => {
+                    if(d.prob != null) {
+                        return colorScale(d.prob)
+                    } else {
+                        return "red"
+                    }
+                })
                 .on("mouseover", (event, d) => {
                     tooltip.transition()
                         .duration(200)
