@@ -16,7 +16,7 @@ function Scatter({ data }) {
 
             const x = d3.scaleUtc()
                 .domain(d3.extent(data, d => new Date(d.accepted_datetime_utc)))
-                .range([margin.left, width - margin.right]);
+                .range([margin.left, width + 100]);
 
             const y = d3.scaleLinear()
                 .domain(d3.extent(data, d => d.component_prob)).nice()
@@ -34,8 +34,6 @@ function Scatter({ data }) {
                 .call(d3.axisLeft(y))
                 .attr("fill", "white")
 
-
-
             svg.append("g")
                 .attr("fill", "#F55F41")
                 .attr("id", "component_prob")
@@ -46,9 +44,15 @@ function Scatter({ data }) {
                 .attr("cy", d => y(d.component_prob))
                 .attr("r", 3)
                 .attr("opacity", .1);
-                
 
-            //--------------------------------
+            svg.append("text")
+                .attr("class", "y3-label")
+                .attr("y", height - 325)
+                .attr("x", width - 750)
+                .text("[component_prob]")
+
+
+            // //--------------------------------
             const y2 = d3.scaleLinear()
                 .domain(d3.extent(data, d => d.book_risk)).nice()
                 .range([height - margin.bottom, margin.top]);
@@ -69,7 +73,13 @@ function Scatter({ data }) {
                 .attr("cy", d => y2(d.book_risk))
                 .attr("r", 3)
                 .style("opacity", .3);
-            //--------------------------------
+
+            svg.append("text")
+                .attr("class", "y3-label")
+                .attr("y", height - 325)
+                .attr("x", width - 575)
+                .text("[book_risk]")
+            // //--------------------------------
             const y3 = d3.scaleLinear()
                 .domain(d3.extent(data, d => d.book_profit_gross)).nice()
                 .range([height - margin.bottom, margin.top]);
@@ -90,17 +100,23 @@ function Scatter({ data }) {
                 .attr("r", 3)
                 .attr("opacity", .5)
 
+            svg.append("text")
+                .attr("class", "y3-label")
+                .attr("y", height - 325)
+                .attr("x", width - 125)
+                .text("[book_profit_gross]")
             //--------------------------------
             const y4 = d3.scaleLinear()
                 .domain(d3.extent(data, d => d.component_num_bet)).nice()
                 .range([height - margin.bottom, margin.top]);
 
             svg.append("g")
-                .attr("transform", `translate(${height * 2},0)`)
-                .call(d3.axisLeft(y4));
+                .attr("transform", `translate(${height * 2 + 150},0)`)
+                .call(d3.axisLeft(y4))
+                .attr("fill", "white");
 
             svg.append("g")
-                .attr("fill", "#3F2273") 
+                .attr("fill", "#3F2273")
                 .attr("id", "component_num_bet")
                 .selectAll("circle")
                 .data(data)
@@ -110,20 +126,23 @@ function Scatter({ data }) {
                 .attr("r", 3)
                 .style("opacity", .3);
 
-
-            // svg.selectAll("#component_num_bet")
-            //     .attr("fill", "none")
-
-            // svg.selectAll("#book_profit_gross")
-            //     .attr("fill", "none")
+            svg.append("text")
+                .attr("class", "y4-label")
+                .attr("y", height - 325)
+                .attr("x", width + 50)
+                .text("[component_num_bet]")
 
             // svg.selectAll("#book_risk")
-            //     .attr("fill", "none")
+            // .attr("fill", "none")
 
             // svg.selectAll("#component_prob")
-            //     .attr("fill", "none")
+            // .attr("fill", "none")
 
+            // svg.selectAll("#book_profit_gross")
+            // .attr("fill", "none")
 
+            //     svg.selectAll("#component_num_bet")
+            //         .attr("fill", "none")
 
             svg.style("background-color", "lightgrey");
 
