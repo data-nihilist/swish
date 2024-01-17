@@ -86,8 +86,8 @@ function TimeSeriesAnalysis({ data }) {
     const svgRef = useRef();
 
     const margin = { top: 10, right: 50, bottom: 50, left: 50 };
-    const width = 900 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const width = 800 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
 
     const [currentYAxisDataValue, setCurrentYAxisDataValue] = useState("book_risk");
 
@@ -133,6 +133,7 @@ function TimeSeriesAnalysis({ data }) {
             const line = d3.line()
                 .x(function(d) { return xScale(d.dateTime)})
                 .y(function(d) { return yScale(d.dataPoint)})
+                .curve(d3.curveCardinal);
             
             svg.append("path")
                 .datum(parsedData)

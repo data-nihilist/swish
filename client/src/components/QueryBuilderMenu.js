@@ -229,7 +229,7 @@ function QueryBuilderMenu(props) {
                     </form>
                 </div>
             <div>
-                    <h4>Current Filters Being Applied To This Query:</h4>
+                    <h4>I only want data where..(set as many constaints as you'd like)</h4>
                 <div>
                     <div>
                         <code>{keyRing}</code>

@@ -121,7 +121,7 @@ function TimeSeriesChart({ data }) {
             .x(d => xScale(parseDate(d.accepted_datetime_utc)))
             .y0(height)
             .y1(d => yScale(d[`${currentYAxisDataValue}`]))
-            .curve(d3.curveBumpY);
+            .curve(d3.curveStepBefore);
 
         const zoom = d3.zoom()
             .scaleExtent([1, 10])
@@ -183,7 +183,7 @@ function TimeSeriesChart({ data }) {
         legend.append("text")
             .attr("x", 20)
             .attr("y", 10)
-            .text("Bet Price")
+            .text(`${currentYAxisDataValue}`)
             .style("font-size", "12px")
             .attr("text-anchor", "start");
 
