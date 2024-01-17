@@ -46,7 +46,7 @@ function Lissajous() {
             prvX = crrX;
             prvY = crrY;
             
-            if(t > 120e3 ) { timer.stop(); } // 120 seconds
+            if(t > 360e3 ) { timer.stop(); } // 120 seconds
     })
         },
 
