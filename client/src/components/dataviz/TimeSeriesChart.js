@@ -126,7 +126,12 @@ function TimeSeriesChart({ data }) {
     }, [data]);
 
     return (
-        <svg ref={svgRef} width={width + margin.left + margin.right} height={height + margin.top + margin.bottom} />
+        <svg 
+            className="card container"
+            ref={svgRef} 
+            width={width + margin.left + margin.right}
+            height={height + margin.top + margin.bottom} 
+            />
     );
 }
 

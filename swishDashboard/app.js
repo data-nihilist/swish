@@ -2,7 +2,7 @@ import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 import { PrismaClient } from '@prisma/client'
-const prisma = new PrismaClient({ log: ["query","warn", "info", "error"]});
+const prisma = new PrismaClient({ log: [/*"query",*/"warn", "info", "error"] });
 
 
 const app = express();
@@ -15,8 +15,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.urlencoded({
-        extended: true,
-    })
+    extended: true,
+})
 );
 app.use(express.json());
 app.use((err, req, res, next) => {
@@ -26,39 +26,41 @@ app.use((err, req, res, next) => {
 
 // Use this getter to troubleshoot your api connection is up and running at localhost:3001/
 
-app.get('/', async (req, res) => {      // Testing out the new set up with prisma. Very happy with the results so far!
+app.get('/', async (req, res) => {
     try {
-        const transactions = await prisma.transaction.findMany({take: 2000, where: {client_name: "client_25"}});
-        if(transactions) {
-            // console.log("Retrieving All " + transactions.length + " Transactions"); // because sometimes you just want to see "20000 rows fetched in your console"
-            return res.status(200).json({transactions, homie});
+        const transactions = await prisma.transaction.findMany({ take: 2000, where: { client_name: "client_25" } });
+        if (transactions) {
+            return res.status(200).json({ transactions, homie });
         } else {
             console.log("You either don't have your dependencies installed or your forgot to place a connection string for postgresql in a .env file in this director. :)");
         }
-        } catch(error) {
-            res.status(400).json({error: error.message});
-        }
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 })
 
 app.post('/query', async (req, res) => {
-        console.log("req.body: ", req.body)
-        const filters = Object.keys(req.body);
-        console.log("CURENT FITLERS: ", filters);
-        // const { client_name, LIMIT, team_abbr } = req.body;     // Here is where things were becoming insane during my first appraoch to this. If you still have access to it, check it out. This is 1/1k the size and headache!
-        // try {
-        //     if(team_abbr === null && client_name === null && LIMIT === null) {
-        //         console.log("no team selected.");                         // similar to c#/other type safe languages, coercing a string to an int with a bitwise cast can be extremely clutch. Could probably take this approach for some of the binary flags.
-        //         const transactions = await prisma.transaction.findMany({take: 2500})
-        //         console.log("Found " + transactions + " Bets.");
-        //         return res.status(201).json({transactions});
-        //     } else {
-        //         const transactions = await prisma.transaction.findMany({take: +LIMIT, where: {client_name, team_abbr}}) // I'm capping this at 10000. I set it to 100K and it had no issue maxing that outselecting 'client_3' resulted in a crash (lol)
-        //         console.log("Found " + transactions.length + " Bets Matching " + client_name + " with bets placed towards " + team_abbr);
-        //         return res.status(201).json({transactions});
-        //     }
-        // } catch(error) {
-        //     res.status(400).json({error: error.message});
-        // }
+    const { stringFilters, numericFilters } = req.body
+    const powerFilter = {};
+    const numbersToCrunch = Object.keys(numericFilters);
+    for (let i = 0; i <= numbersToCrunch.length - 1; i++) {
+        powerFilter[numbersToCrunch[i]] = parseFloat(numericFilters[numbersToCrunch[i]]);
+    }
+    const stringKeys = Object.keys(stringFilters);
+    for (let i = 0; i <= stringKeys.length - 1; i++) {
+        powerFilter[stringKeys[i]] = stringFilters[stringKeys[i]];
+    }
+    try {
+        console.log("Querying Using ", powerFilter);
+        const transactions = await prisma.transaction.findMany({
+            take: 10000,
+            where: powerFilter
+        })
+        console.log(`Returning ${transactions.length} results. . .`);
+        return res.status(201).json({ transactions });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 })
 
 app.listen(PORT, () => {

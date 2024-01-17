@@ -43,7 +43,7 @@ function Scatter({ data }) {
 
     return (
         <svg
-            className="d3-component"
+            className="card container"
             width={800}
             height={400}
             ref={d3Container}
