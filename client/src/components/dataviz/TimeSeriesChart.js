@@ -24,7 +24,7 @@ function TimeSeriesChart({ data }) {
             .range([0, width]);
 
         const yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.bet_price)])
+            .domain([0, d3.max(data, d => d.book_risk)])
             .range([height, 0]);
 
         const xAxis = d3.axisBottom(xScale).ticks(5);
@@ -33,7 +33,7 @@ function TimeSeriesChart({ data }) {
         const area = d3.area()
             .x(d => xScale(parseDate(d.accepted_datetime_utc)))
             .y0(height)
-            .y1(d => yScale(d.bet_price))
+            .y1(d => yScale(d.book_risk))
             .curve(d3.curveBumpX);
 
         const zoom = d3.zoom()

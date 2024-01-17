@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 
 function HeatMap({ data }) {
     const svgRef = useRef();
-    const [dimensions, setDimensions] = useState({ width: 950, height: 600 }); // Increase width
-    const margin = { top: 50, right: 20, bottom: 100, left: 120, legendRight: 10 }; // Additional margin for legend
+    const [dimensions, setDimensions] = useState({ width: 950, height: 600 });
+    const margin = { top: 50, right: 20, bottom: 100, left: 120, legendRight: 10 };
 
     useEffect(() => {
         if (data && svgRef.current) {
