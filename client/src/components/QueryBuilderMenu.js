@@ -1,92 +1,8 @@
 import React, { useState } from 'react';
 import HeatMap from "./dataviz/HeatMap.js";
 import TimeSeriesChart from "./dataviz/TimeSeriesChart.js";
-// import Lissajous from "./dataviz/fun/lissajous.js";
+import Lissajous from "./dataviz/fun/lissajous.js";
 import Scatter from "./dataviz/Scatter.js";
-
-// const OPTIONS = [
-//     "",
-//     "date",
-//     "home",
-//     "line",
-//     "score",
-//     "sport",
-//     "state",
-//     "actual",
-//     "opp_id",
-//     "period",
-//     "pos_id",
-//     "season",
-//     "country",
-//     "product",
-//     "team_id",
-//     "bet_prob",
-//     "bet_type",
-//     "currency",
-//     "event_id",
-//     "opp_abbr",
-//     "pos_abbr",
-//     "sport_id",
-//     "state_id",
-//     "usage_id",
-//     "bet_price",
-//     "book_risk",
-//     "client_id",
-//     "gamestate",
-//     "is_active",
-//     "is_inplay",
-//     "opp_score",
-//     "player_id",
-//     "selection",
-//     "stat_type",
-//     "team_abbr",
-//     "country_id",
-//     "is_cashout",
-//     "is_in_game",
-//     "product_id",
-//     "bet_type_id",
-//     "client_name",
-//     "currency_id",
-//     "game_played",
-//     "line_at_bet",
-//     "parlay_type",
-//     "player_name",
-//     "proj_at_bet",
-//     "bet_id_swish",
-//     "datetime_utc",
-//     "game_started",
-//     "gamestate_id",
-//     "is_alternate",
-//     "settled_date",
-//     "stat_type_id",
-//     "usage_at_bet",
-//     "actual_at_bet",
-//     "event_time_id",
-//     "event_type_id",,
-//     "received_date",
-//     "component_prob",
-//     "parlay_type_id",
-//     "component_price",
-//     "event_status_id",
-//     "line_diff_at_bet",,
-//     "orig_proj_at_bet",
-//     "prob_diff_at_bet",
-//     "prob_norm_at_bet",
-//     "book_profit_gross",
-//     "component_cnt_bet",
-//     "component_num_bet",
-//     "component_id_swish",
-//     'market_duration_id',
-//     "book_risk_component",
-//     "market_suspended_id",
-//     "event_time_remaining",
-//     "market_duration_type",
-//     "accepted_datetime_utc",
-//     "market_duration_value",
-//     "accepted_min_before_start",
-//     "book_profit_gross_component",
-//     "market_suspended_description"
-// ];
 
 const STRING_QUERY_OPTIONS = [
     "",
@@ -185,6 +101,15 @@ function QueryBuilderMenu(props) {
     const [numericFilterSelect, setNumericFilterSelect] = useState("");
     const [numericFilterInputValue, setNumericFilterInputValue] = useState(null);
 
+    const [showLissajous, setShowLissajou] = useState(true);
+
+    const lissajousContent = showLissajous ? <div className="card bg-black display-f justify-center">
+    <Lissajous data={null}/>
+    <Lissajous data={null}/>
+    <Lissajous data={null}/>
+    <Lissajous data={null}/>
+    </div> : null
+
     const stringQueryOptions = STRING_QUERY_OPTIONS.map(option => {
         return (
             <option key={option} id={option} name={option} value={option}>{option}</option>
@@ -255,6 +180,7 @@ function QueryBuilderMenu(props) {
             const queryResponseBody = await queryRequest.json();
             setQueryResults(queryResponseBody.transactions);
             setQuerySuccess(true);
+            setShowLissajou(false);
         } catch (error) {
             console.error(`Error in fetch: ${error}`)
         }
@@ -270,6 +196,7 @@ function QueryBuilderMenu(props) {
         <code>{keyRing.push(`${numericKeys[i]} : ${numericFilters[numericKeys[i]]}, `)}</code>
     }
 
+    console.log(queryResults[0]);
     return (
         <div className="">
             <div className="card bg-black text-white">
@@ -309,9 +236,9 @@ function QueryBuilderMenu(props) {
                 </div>
             </div>
             </div>
-                {querySuccess ? <HeatMap data={queryResults} /> : null}
-                {querySuccess ? <TimeSeriesChart data={queryResults} /> : null}
+                {querySuccess ? <HeatMap data={queryResults} /> : lissajousContent}
                 {querySuccess ? <Scatter data={queryResults} /> : null}
+                {querySuccess ? <TimeSeriesChart data={queryResults} /> : null}
         </div>
     )
 
