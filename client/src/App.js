@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <div className="navbar">
-        <h1 className="display-f justify-center text-coral">SWISH</h1>
+        <h1 className="display-f text-coral">SWISH</h1>
       </div>
         <Dashboard/>
       </div>
