@@ -82,13 +82,10 @@ const Y_AXIS_OPTIONS = [
 
 
 function TimeSeriesAnalysis({ data }) {
-
     const svgRef = useRef();
-
-    const margin = { top: 10, right: 50, bottom: 50, left: 50 };
+    const margin = { top: 50, right: 10, bottom: 50, left: 50 };
     const width = 800 - margin.left - margin.right;
-    const height = 600 - margin.top - margin.bottom;
-
+    const height = 500 - margin.top - margin.bottom;
     const [currentYAxisDataValue, setCurrentYAxisDataValue] = useState("book_risk");
 
     const YaxisSelectOptions = Y_AXIS_OPTIONS.map(option => {
@@ -105,8 +102,7 @@ function TimeSeriesAnalysis({ data }) {
     useEffect(() => {
         if (data.length > 0) {
             
-            const svg = d3.select(svgRef.current).style("background-color", "lightgrey")
-
+            const svg = d3.select(svgRef.current).style("background-color", "#77D1B1")
             svg.selectAll("*").remove();
             
             let parsedData = [];
@@ -117,34 +113,72 @@ function TimeSeriesAnalysis({ data }) {
             const xScale = d3.scaleUtc()
                 .domain(d3.extent(parsedData, d => d.dateTime))
                 .range([0, width]);
-            
-            svg.append("g")
-                .attr("transform", `translate(${margin.left}, ${height})`)
-                .call(d3.axisBottom(xScale));
 
             const yScale = d3.scaleLinear()
                 .domain([0, d3.max(parsedData, d => d.dataPoint)])
                 .range([height, 0]);
-            
-            svg.append("g")
-                .attr("transform", `translate(${margin.left}, ${margin.top})`)
-                .call(d3.axisLeft(yScale));
 
             const line = d3.line()
                 .x(function(d) { return xScale(d.dateTime)})
                 .y(function(d) { return yScale(d.dataPoint)})
                 .curve(d3.curveCardinal);
             
-            svg.append("path")
-                .datum(parsedData)
-                .attr("fill", "none")
-                .attr("stroke", "steelblue")
-                .attr("stroke-width", 1.5)
-                .attr("d", line);
+//-----------------------messing around
+            const area = d3.area()
+                .x(d => xScale(d.dateTime))
+                .y0(height)
+                .y1(d => yScale(d.dataPoint))
+                .curve(d3.curveNatural);
+            
+            const zoom = d3.zoom()
+                .scaleExtent([1, 10])
+                .translateExtent([[0, 0], [width, height]])
+                .extent([[0, 0], [width, height]])
+                .on("zoom", (event) => {
+                    const newXScale = event.transform.rescaleX(xScale);
+                    svg.select(".x-axis").call(d3.axisBottom(xScale))
+                    svg.select(".area").attr("d", area.x(d => newXScale(d.dateTime)));
+                });
+            
+            svg.call(zoom);
+        
+            const brush = d3.brushX()
+                .extent([[0, 0], [width, height]])
+                .on("end", (event) => {
+                    if (!event.selection) return;
+                    const [x0, x1] = event.selection.map(d => xScale.invert(d));
+                    xScale.domain([x0, x1]);
+                    svg.select(".x-axis").call(d3.axisBottom(xScale))
+                    svg.select(".area").attr("d", area);
+                    svg.select(".brush").call(brush.move, null);
+                });
+                
+                svg.append("path")
+                    .datum(parsedData)
+                    .attr("class", "area")
+                    .attr("fill", "none")
+                    .attr("stroke", "#EB5A38")
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line);
+                
+                svg.append("g")
+                    .attr("class", "x-axis")
+                    .attr("transform", `translate(${margin.left}, ${height + margin.top})`)
+                    .call(d3.axisBottom(xScale));
 
-        }
+                svg.append("g")
+                    .attr("transform", `translate(${margin.left}, ${margin.top})`)
+                    .call(d3.axisLeft(yScale));
+
+                svg.append("g")
+                    .attr("class", "brush")
+                    .call(brush);
+
+            }
     }, [data, currentYAxisDataValue]);
+
     const TITLE_DECORATOR = `Time Series Analysis of ${currentYAxisDataValue} Over Time (utcZ)`
+
     return (
         <div className="card container">
             <div>
