@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import HeatMap from "./dataviz/HeatMap.js";
 import Lissajous from "./dataviz/fun/lissajous.js";
-import Scatter from "./dataviz/Scatter.js";
+// import Scatter from "./dataviz/Scatter.js";
 import TimeSeriesAnalysis from "./dataviz/TimeSeriesAnalysis.js";
 import Histogram from "./dataviz/Histogram.js";
+import TestingRecharts from "./dataviz/fun/testingRecharts.js";
+
 
 const STRING_QUERY_OPTIONS = [
     "",
@@ -237,6 +239,7 @@ function QueryBuilderMenu(props) {
                 </div>
             </div>
             </div>
+                {querySuccess ? <TestingRecharts data={queryResults} /> : null}
                 {querySuccess ? <HeatMap data={queryResults} /> : lissajousContent}
                 {querySuccess ? <TimeSeriesAnalysis data={queryResults} /> : null}
                 {querySuccess ? <Histogram data={queryResults} /> : null}

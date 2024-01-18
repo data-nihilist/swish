@@ -53,7 +53,7 @@ app.post('/query', async (req, res) => {
     try {
         console.log("Querying Using ", powerFilter);
         const transactions = await prisma.transaction.findMany({
-            take: 10000,
+            take: 5000,
             where: powerFilter,
             orderBy: {
                 accepted_datetime_utc: 'asc'
