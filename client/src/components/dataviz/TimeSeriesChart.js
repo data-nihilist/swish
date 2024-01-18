@@ -100,7 +100,6 @@ function TimeSeriesChart({ data }) {
 
     useEffect(() => {
 
-
         const svg = d3.select(svgRef.current);
         svg.selectAll("*").remove();
 

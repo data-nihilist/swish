@@ -5,8 +5,8 @@ function App() {
 
   return (
     <div>
-      <div className="navbar">
-        <h1 className="display-f text-coral">SWISH</h1>
+      <div className="navbar-mint">
+        <h1 className="display-f text-white">SWISH</h1>
       </div>
         <Dashboard/>
       </div>
