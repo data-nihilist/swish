@@ -237,10 +237,10 @@ function QueryBuilderMenu(props) {
                 </div>
             </div>
             </div>
-                {querySuccess ? <Histogram data={queryResults} /> : null}
-                {querySuccess ? <TimeSeriesAnalysis data={queryResults} /> : null}
                 {querySuccess ? <HeatMap data={queryResults} /> : lissajousContent}
-                {querySuccess ? <Scatter data={queryResults} /> : null}
+                {querySuccess ? <TimeSeriesAnalysis data={queryResults} /> : null}
+                {querySuccess ? <Histogram data={queryResults} /> : null}
+                {/* {querySuccess ? <Scatter data={queryResults} /> : null} I'm dreading this schart the more I mess with it, but I'd like to keep it here so I know there's always something to improve.*/}
         </div>
     )
 

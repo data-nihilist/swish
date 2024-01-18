@@ -80,14 +80,23 @@ const Y_AXIS_OPTIONS = [
     "prob_diff_at_bet"
 ]
 
+const secondYOptions = Y_AXIS_OPTIONS.slice(0);
+console.log(secondYOptions);
+
 function Histogram({ data }) {
     const svgRef = useRef();
     const margin = { top: 10, right: 30, bottom: 30, left: 40 };
     const width = 800 - margin.left - margin.right;
     const height = 600 - margin.top - margin.bottom;
     const [currentYAxisDataValue, setCurrentYAxisDataValue] = useState("bet_prob");
+    const [currentSecondYAxisDataValue, setCurrentSecondYAxisDataValue] = useState("line")
 
     const YaxisSelectOptions = Y_AXIS_OPTIONS.map(option => {
+        return (
+            <option key={option} id={option} name={option} value={option}>{option}</option>
+        )
+    })
+    const secondYaxisSelectOptions = secondYOptions.map(option => {
         return (
             <option key={option} id={option} name={option} value={option}>{option}</option>
         )
@@ -96,6 +105,10 @@ function Histogram({ data }) {
     const handleYAxisAssignment = (event) => {
         event.preventDefault();
         setCurrentYAxisDataValue(event.currentTarget.value);
+    }
+    const handleSecondYAxisAssignment = (event) => {
+        event.preventDefault();
+        setCurrentSecondYAxisDataValue(event.currentTarget.value);
     }
 
     useEffect(() => {
@@ -108,13 +121,13 @@ function Histogram({ data }) {
 
             let parsedData = [];
             data.forEach(datum => {
-                parsedData.push({ val: datum[`${currentYAxisDataValue}`] })
+                parsedData.push({ val1: datum[`${currentYAxisDataValue}`], val2: datum[`${currentSecondYAxisDataValue}`] })
             })
 
             var mx = d3.max(parsedData);
 
             var xScale = d3.scaleLinear()
-                .domain([0, d3.max(parsedData, function (d) { return +d.val })])
+                .domain([0, d3.max(parsedData, function (d) { return +d.val1 })])
                 .range([0, width])
 
             svg.append("g")
@@ -122,29 +135,42 @@ function Histogram({ data }) {
                 .call(d3.axisBottom(xScale));
 
             var histogram = d3.bin()
-                .value(function (d) { return d.val * 100 })
+                .value(function (d) { return d.val1 * 100 })
                 .domain(xScale.domain())
                 .thresholds(xScale.ticks(20));
 
-            var bins = histogram(parsedData);
+            var bins1 = histogram(parsedData.filter(function (d) { return d.val1 }));
+            var bins2 = histogram(parsedData.filter(function (d) { return d.val2 }));
 
             var yScale = d3.scaleLinear()
                 .range([height, 0]);
 
-            yScale.domain([0, d3.max(bins, function (d) { return d.length; })]);
+            yScale.domain([0, d3.max(bins1, function (d) { return d.length; })]);
 
             svg.append("g")
                 .call(d3.axisLeft(yScale));
 
             svg.selectAll("rect")
-                .data(bins)
+                .data(bins1)
                 .enter()
                 .append("rect")
-                .attr("x", parsedData, d => d.val)
+                .attr("x", 1)
                 .attr("transform", function (d) { return `translate(${xScale(+d.x0)}, ${yScale(d.length)})` })
                 .attr("width", function (d) { return xScale(d.x1) - xScale(d.x0) })
                 .attr("height", function (d) { return height - yScale(d.length) })
                 .style("fill", "coral");
+
+            svg.selectAll("rect2")
+                .data(bins2)
+                .enter()
+                .append("rect")
+                .attr("x", 1)
+                .attr("transform", function (d) { return `translate(${xScale(+d.x0)}, ${yScale(d.length)})` })
+                .attr("width", function (d) { return xScale(d.x1) - xScale(d.x0) })
+                .attr("height", function (d) { return height - yScale(d.length) })
+                .attr("fill", "purple")
+                .attr("opacity", .5)
+
 
 
         }
@@ -154,12 +180,18 @@ function Histogram({ data }) {
     return (
         <div className="card container">
             <div>
-                <div className="display-f justify-center"><code>What To Plot Over Time?</code>
+                <div className="display-f justify-center"><code>Change What We Are Plotting: currently [{`${currentYAxisDataValue}`}]</code>
                     <select className="ml-2 bg-black text-white" onChange={handleYAxisAssignment}>
                         {YaxisSelectOptions}
                     </select>
                 </div>
+                <div className="display-f justify-center"><code>Change What [{`${currentYAxisDataValue}`}] Is Being Plotted Against [{`${currentSecondYAxisDataValue}`}]</code>
+                    <select className="ml-2 bg-black text-white" onChange={handleSecondYAxisAssignment}>
+                        {secondYaxisSelectOptions}
+                    </select>
+                </div>
             </div>
+            <h4>Plotting <code>[{`${currentYAxisDataValue}`}]</code> & <code>[{`${currentSecondYAxisDataValue}`}]</code> at time of bet placement</h4>
             <svg
                 ref={svgRef}
                 width={width + margin.left + margin.right}
