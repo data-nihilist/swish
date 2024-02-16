@@ -33,6 +33,8 @@ There are two categories you can set as of right now (These were determined in t
 The way this works is in the back end, string-type constrains are easier to work with than integer types, which require conversion before hitting our Prisma query.
 Some javascript magic takes care of those filters very easily.
 
+You can also omit this step entirely to get a preview of the data viz dashboard's capabilities. Clicking "Query Database" without any constraints will grab the first 5000 results sorted by accepted_datetime_utc.
+
 I then build a new filter object, justly named 'powerFilter' and pass that object to Prisma. The result is an accurate filtered response by our DB.
 
 You can reset all queries, which upon doing so you'll see your query string empty out on the Query Builder Menu empty out. You can also edit existing constraints by re-selecting the column's name and entering a new value.
