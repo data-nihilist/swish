@@ -40,7 +40,8 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/query', async (req, res) => {
-    const { stringFilters, numericFilters } = req.body
+    const { stringFilters, numericFilters } = req.body;
+    // Take the request body's query constraints (if any) from the front end and create a new filter object for Prisma
     const powerFilter = {};
     const numbersToCrunch = Object.keys(numericFilters);
     for (let i = 0; i <= numbersToCrunch.length - 1; i++) {
@@ -54,7 +55,7 @@ app.post('/query', async (req, res) => {
         console.log("Querying Using ", powerFilter);
         const transactions = await prisma.transaction.findMany({
             take: 5000,
-            where: powerFilter,
+            where: powerFilter,                                     // filter object handed to Prisma
             orderBy: {
                 accepted_datetime_utc: 'asc'
             }
