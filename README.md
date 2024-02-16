@@ -1,4 +1,4 @@
-Swish Dashboard,
+Sports Betting Data Viz Dashboard,
 
 I'm using nodemon to watch my express server, so you may need to install nodemon to your machine: `$ npm i nodemon -g` <-- that '-g' flag installs nodemon globally to your machine. You can omit this flag if you want.
 
