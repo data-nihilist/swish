@@ -15,7 +15,8 @@ In `client`, run `npm i` to install all dependencies, then `$ npm start` to fire
 I'm using a postgresql database with an express web server.
 
     If you don't have a database to perform queries, refer to the `scratch.txt` file in the root. In there you'll see the step by step break down of how I've ingested all of the sample data to my database. 
-    This can be treated as a boiler-plate approach to ingesting any/all data from provided it's coming from a .json file, and is an array of json objects. Null values are accounted for, as well.
+    This can be treated as a boiler-plate approach to ingesting any/all data provided it's coming from a .json file, and is an array of json objects. Null values are accounted for, as well.
+    Feel free to edit the schema of the Transaction object to fit your sample data - just be mindful of what you're treating as Strings/Integers/Floats! :)
 
 I'm most proud of my heat map plotting bet types, players, and listed swish_component_prob. I knew nothing about sports betting for this and now I feel like I'm starting to get it.
 
