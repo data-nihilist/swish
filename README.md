@@ -4,6 +4,16 @@ I'm using nodemon to watch my express server, so you may need to install nodemon
 
 You'll need to add a `.env` file to the root of the `swishDashboard` directory for Prisma to create a client instance of your database. Refer to `.env.example` file for the connection string structure.
 
+You're going to need to use (formerly known as, 'postgresql,') postgresql@14.
+
+If you don't - and maybe you use homebrew?
+
+        - run `brew install postgresql@14`
+        - && `brew services start postgresql@14`
+
+Otherwise: [https://www.postgresql.org/docs/](here's a link to the pg docs)
+
+
 Your .env file should have a single line, delimiting the connection string as: `DATABASE_URL="postgresql://{USERNAME}:{PASSWORD}@{URI}:{PORT}/{DB_NAME}?schema=public&"`
 
 Once you're here, split your terminal into two panes so that in one you can direct to `swish/swishDashboard` (server directory) and `swish/client` (client directory), respectively.
@@ -18,27 +28,30 @@ I'm using a postgresql database with an express web server.
     This can be treated as a boiler-plate approach to ingesting any/all data provided it's coming from a .json file, and is an array of json objects. Null values are accounted for, as well.
     Feel free to edit the schema of the Transaction object to fit your sample data - just be mindful of what you're treating as Strings/Integers/Floats! :)
 
-I'm most proud of my heat map plotting bet types, players, and listed swish_component_prob. I knew nothing about sports betting for this and now I feel like I'm starting to get it.
+Upon load up, you'll see the dashboard. It's very simple. You could also just use the swishDashboard dir as a baseline for your own data crunching needs.
 
-Upon load up, you'll see the dashboard. It's very simple.
+You can set constrains on your search queries by adding filters using the dropdown menus and input fields - now that I'm revisiting this repo, I could build a CLI to accompany this so you could do most of that config from the shell. There's an idea.
 
-You can set constrains on your search queries by adding filters using the dropdown menus and input fields.
-
-There are two categories you can set as of right now (These were determined in the schema file representing a Transaction object. You'll see where I chose to consider each of the 82 fields as which data type there:
+There are two categories you can set as of right now (These were determined in the schema file representing a capital 'T' Transaction object from the original data set I was given.
 
         1) String type properties
-                ex: client_name : "client_25"
+                ex: field_a : "client_25"       -> sets a constrait on your query on the field_a column of your table
         2) Numeric type properties
-                ex: line : 5.3
+                ex: fubar_b : 5.3               -> sets additional constraints, and so on
 
-The way this works is in the back end, string-type constrains are easier to work with than integer types, which require conversion before hitting our Prisma query.
-Some javascript magic takes care of those filters very easily.
 
-You can also omit this step entirely to get a preview of the data viz dashboard's capabilities. Clicking "Query Database" without any constraints will grab the first 5000 results sorted by accepted_datetime_utc.
 
-I then build a new filter object, justly named 'powerFilter' and pass that object to Prisma. The result is an accurate filtered response by our DB.
+You can also omit this step entirely to get a preview of the data viz dashboard's capabilities. Clicking "Query Database" without any constraints will grab the first 5000 results.
 
-You can reset all queries, which upon doing so you'll see your query string empty out on the Query Builder Menu empty out. You can also edit existing constraints by re-selecting the column's name and entering a new value.
+Results are currently being sorted by accepted_datetime_utc.
 
-Cheers,
-Matthew McCredy
+The backend builds the 'powerFilter' object, justly named, and passes that object to Prisma. The result is an accurate, filtered response of our DB table.
+
+You can reset all queries, which upon doing so you'll see your query string empty out on the Query Builder Menu. You can also edit existing constraints by re-selecting the column's name and entering a new value.
+
+
+
+A massive thank you to the engineer, Keith, who shared with me a dataset with over 500k rows. The 'CSV Rainbow' extension in my IDE made for inspiring flows and patterns,
+
+Thanks for visiting an early project of mine,
+-M

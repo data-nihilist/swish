@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
+/*
+    The data I first played with was a sample of sports betting transactions that occurred during a single college playoff basketball game.
+    I originally wanted to see if I could visualize the probability of a player's performance in a game, but then I realized I could plot whatever I wanted here, and this who thing became pretty fun.
+
+    lines 21-25 should be replaced with the fields you'd like to see rendered with d3.
+    A good TODO here: bring in some simple redux pattern for setting global state for the fields you'd like to see rendered in the heatmap + other fun stuff.
+*/
+
 function HeatMap({ data }) {
     const svgRef = useRef();
     const [dimensions, setDimensions] = useState({ width: 950, height: 600 });

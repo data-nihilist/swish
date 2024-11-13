@@ -1,10 +1,14 @@
+import { symbols } from 'd3';
 import React, { useEffect, useRef, useState } from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts'
+
+/*
+        There are several charting libraries that are built on top of D3.js. One of the most popular is Recharts, which is a composable charting library built on top of D3. Very easy and fast to implement, though D3 is still OP.
+*/
 
 function TestingRecharts({ data }) {
 
     const [currentYAxisDataValue, setCurrentYAxisDataValue] = useState("bet_prob");
-    const [currentXAxisDataValue, setCurrentXAxisDataValue] = useState("country");
 
     const YaxisSelectOptions = Y_AXIS_OPTIONS.map(option => {
         return (

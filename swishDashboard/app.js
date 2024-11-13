@@ -57,7 +57,7 @@ app.post('/query', async (req, res) => {
             take: 5000,
             where: powerFilter,                                     // filter object handed to Prisma
             orderBy: {
-                accepted_datetime_utc: 'asc'
+                accepted_datetime_utc: 'asc'        //--------------Here is what I used the last time I ran this - you should set this to whichever column in your db table you want.
             }
         })
         console.log(`Returning ${transactions.length} results. . .`);
