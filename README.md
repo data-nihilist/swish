@@ -1,28 +1,25 @@
-Sports Betting Data Viz Dashboard,
+Data Viz Dashboard. I needed to get used to this sort of workflow - plumbing sanitized data into a database and performing queries against that data.
 
-I'm using nodemon to watch my express server, so you may need to install nodemon to your machine: `$ npm i nodemon -g` <-- that '-g' flag installs nodemon globally to your machine. You can omit this flag if you want.
+This uses nodemon to watch the express server. You may need to install nodemon to your machine: `$ npm i nodemon` adding `-g` for global install.
 
-You'll need to add a `.env` file to the root of the `swishDashboard` directory for Prisma to create a client instance of your database. Refer to `.env.example` file for the connection string structure.
+You'll need to add a `.env` file to the root of the `swishDashboard` directory. It's for Prisma to create a client instance of your database.
+
+Refer to `.env.example` file for the connection string's structure.
 
 You're going to need to use (formerly known as, 'postgresql,') postgresql@14.
 
-If you don't - and maybe you use homebrew?
+If you don't, and maybe you use homebrew? :D
 
         - run `brew install postgresql@14`
         - && `brew services start postgresql@14`
 
-Otherwise: [https://www.postgresql.org/docs/](here's a link to the pg docs)
-
-
-Your .env file should have a single line, delimiting the connection string as: `DATABASE_URL="postgresql://{USERNAME}:{PASSWORD}@{URI}:{PORT}/{DB_NAME}?schema=public&"`
+Otherwise: https://www.postgresql.org/docs/
 
 Once you're here, split your terminal into two panes so that in one you can direct to `swish/swishDashboard` (server directory) and `swish/client` (client directory), respectively.
 
-In `swishDashboard`, run `npm i` to install all dependecies, then `$ npm run swish` to fire up the server.
+In `swishDashboard`, run `npm i` to install all dependecies, then `$ npm run swish` to run the server.
 
 In `client`, run `npm i` to install all dependencies, then `$ npm start` to fire up the React front end.
-
-I'm using a postgresql database with an express web server.
 
     If you don't have a database to perform queries, refer to the `scratch.txt` file in the root. In there you'll see the step by step break down of how I've ingested all of the sample data to my database. 
     This can be treated as a boiler-plate approach to ingesting any/all data provided it's coming from a .json file, and is an array of json objects. Null values are accounted for, as well.
