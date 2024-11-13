@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import HeatMap from "./dataviz/HeatMap.js";
 import Lissajous from "./dataviz/fun/lissajous.js";
 // import Scatter from "./dataviz/Scatter.js";
 import TimeSeriesAnalysis from "./dataviz/TimeSeriesAnalysis.js";
 import Histogram from "./dataviz/Histogram.js";
 import TestingRecharts from "./dataviz/fun/testingRecharts.js";
-
 
 
 function QueryBuilderMenu(props) {
@@ -24,9 +23,7 @@ function QueryBuilderMenu(props) {
     
     const [showLissajous, setShowLissajou] = useState(true);
     
-    const lissajousContent = showLissajous ? <div className="card bg-black display-f justify-center">
-    <Lissajous data={null}/>
-    <Lissajous data={null}/>
+    const lissajousContent = showLissajous ? <div className="container card bg-black display-f justify-center">
     <Lissajous data={null}/>
     <Lissajous data={null}/>
     </div> : null
@@ -120,7 +117,7 @@ const stringQueryOptions = STRING_QUERY_OPTIONS.map(option => {
         
         console.log(queryResults[0]);
         return (
-            <div className="">
+            <div className="container bg-black">
             <div className="card bg-black text-white">
                 <h4 className="display-f justify-center mb-2 mt-2"><code>Query by..</code></h4>
                 <div className="display-f justify-center">

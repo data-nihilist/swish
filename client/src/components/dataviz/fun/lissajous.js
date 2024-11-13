@@ -1,6 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
+/*
+    Lissajous curves are a family of curves described by the parametric equations: x = A sin(a t + δ), y = B sin(b t).
+
+    The appearance of the figure is highly sensitive to the ratio a/b. For a/b a rational number, the curve will be closed; otherwise, it will be dense and never close. The shape of the curve is also sensitive to the phase difference δ.
+    The curves are named after Jules Antoine Lissajous, who studied them in 1857. He was sort of a maniac, but in a cool way.
+    
+    He was a French mathematician, physicist, and philosopher.
+    He was a professor at the Faculté des Sciences at the Sorbonne in Paris and a member of the French Academy of Sciences. He was also a member of the Bureau des Longitudes, and an officer of the Légion d'honneur.
+    He was born in Versailles, France, and died in Plombières-les-Bains.
+*/
+
 function Lissajous() {
     const svgRef = useRef();
     const margin = { top: 30, right: 120, bottom: 50, left: 60 };
